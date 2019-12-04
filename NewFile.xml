@@ -1,0 +1,2 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Response><Gather timeout="5" numDigits="1"><Say language="es">Para Español oprime el uno.</Say><Say language="en">For English, please hold or press two.</Say></Gather></Response>

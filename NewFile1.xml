@@ -1,0 +1,73 @@
+{
+  "commands": [ {
+      "apply-pmml-model-command": {
+        "outIdentifier": null,
+        "packageName": null,
+        "hasMining": false,
+        "requestData": {
+          "correlationId": "123",
+          "modelName": "disputePMMLModel",
+          "source": null,
+          "requestParams": [
+            {
+              "correlationId": "123",
+              "name": "age",
+              "type": "java.lang.Double",
+              "value": "25.0"
+            },
+            {
+              "correlationId": "123",
+              "name": "holder_index",
+              "type": "java.lang.Double",
+              "value": "2.0"
+            },
+            {
+              "correlationId": "123",
+              "name": "incidents",
+              "type": "java.lang.Double",
+              "value": "5.0"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+
+{
+  "commands": [ {
+      "apply-pmml-model-command": {
+        "outIdentifier": null,
+        "packageName": null,
+        "hasMining": false,
+        "requestData": {
+          "correlationId": "1232",
+          "segmentationId":"1",
+          "modelName": "disputePMMLTreeModel",
+          "source": null,
+          "requestParams": [
+            {
+              "correlationId": "1232",
+              "name": "age",
+              "type": "java.lang.Double",
+              "value": "25.0"
+            },
+            {
+              "correlationId": "1232",
+              "name": "holder_index",
+              "type": "java.lang.Double",
+              "value": "2.0"
+            },
+            {
+              "correlationId": "1232",
+              "name": "incidents",
+              "type": "java.lang.Double",
+              "value": "5.0"
+            }
+          ]
+        }
+      }
+    }
+  ]
+}
+

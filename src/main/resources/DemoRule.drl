@@ -1,0 +1,11 @@
+package csc.cscrule;
+
+import java.lang.Number;
+
+rule "DemoRule"
+	dialect "mvel"
+	when
+		apptax : Applicant( name == "Jey" , age > 18 )
+	then
+		apptax.setBaseTax( 10.0 );
+end

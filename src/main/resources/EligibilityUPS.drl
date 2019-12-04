@@ -1,0 +1,543 @@
+package com.signavio.droolsexport._2a372c07bb644dc195f153c04d6d545f._2 
+
+import java.time.OffsetTime
+import java.util.Arrays
+import org.slf4j.Logger
+import java.text.DecimalFormat
+import org.slf4j.LoggerFactory
+import com.signavio.dmn.formulae.v3.IndexedListElement
+import java.util.ArrayList
+import java.util.HashSet
+import java.math.BigDecimal
+import java.util.List
+import java.time.OffsetDateTime
+import com.signavio.dmn.formulae.v3.DmnHierarchyFormulae
+import java.time.LocalDate
+import com.signavio.dmn.formulae.v3.DmnFormulae
+import java.util.Collections
+import java.math.RoundingMode
+
+global String modelId
+global Integer revisionNumber
+global List $allMessages
+global Logger $logger
+
+declare  DmnFormulae 
+end
+
+declare  DmnFormulaeLocal  extends  DmnFormulae  
+end
+
+declare  DmnHierarchyFormulae 
+end
+
+declare  IndexedListElement 
+end
+
+declare  AnnotationItem 
+    decision : String  
+    annotationName : String  
+    ruleName : String  
+    category : AnnotationCategory  
+    message : String  
+    timestamp : OffsetDateTime  
+end
+
+declare  Input 
+    facility : Facility  
+    employee : Employee  
+end
+
+declare  DetermineUpsEmployeePayrollEligibility  extends  IndexedListElement  
+    determineUpsEmployeePayrollEligibility : Boolean  
+end
+
+declare  DetermineUpsEmployeePayrollEligibility_Output 
+    determineUpsEmployeePayrollEligibility : Boolean  
+end
+
+declare  Facility 
+    state : String  
+    city : String  
+    zip : BigDecimal  
+end
+
+declare  Employee 
+    hourlyPay : BigDecimal  
+    type : String  
+    manualIndicator : String  
+end
+
+declare enum AnnotationCategory
+	INFO,CRITICAL,REGULATION,POLICY;
+end
+
+rule "initialize_version_info"
+    no-loop true
+    salience 1000
+when
+then
+	drools.getWorkingMemory().setGlobal("modelId", "2a372c07bb644dc195f153c04d6d545f");
+	drools.getWorkingMemory().setGlobal("revisionNumber", 2);
+end
+
+rule "initialize_annotations_list"
+    no-loop true
+    salience 1000
+when
+then
+	drools.getWorkingMemory().setGlobal("$allMessages", new ArrayList());
+end
+
+rule "add_formulae_to_memory"
+    no-loop true
+    salience 1000
+when
+then
+	insert(new DmnFormulaeLocal());
+	insert(new DmnHierarchyFormulae());
+end
+
+rule "init_logger"
+    no-loop true
+    salience 1000
+when
+then
+	drools.getWorkingMemory().setGlobal("$logger", LoggerFactory.getLogger("DroolsExecution"));
+end
+
+rule "log_input_rule"
+    no-loop true
+    salience 999
+when
+    $input : Input(  )  
+then
+	$logger.info($input.toString());
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_1"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "CA")) ) 
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Francisco"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Oakland"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Diego"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Los Angeles")}))) ) 
+	
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(0);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_2"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "NonUnion"), $F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Management")}))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "CA")) ) 
+    eval( $F.nullSafeEval($F.not($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Francisco"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Oakland"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Diego"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Los Angeles")})))) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(1);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_3"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "MA")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(2);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_4"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "WA")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(3);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_5"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "OR")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(4);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_6"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "VT")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(5);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_7"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "NonUnion"), $F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Management")}))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "VT")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(6);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_8"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "NonUnion"), $F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Management")}))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "AZ")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(7);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_9"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "AZ")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(8);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_10"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "NY")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(9);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_11"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "MN")) ) 
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Minneapolis"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "St Paul")}))) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(10);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_12"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "NonUnion"), $F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Management")}))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "PA")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(11);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_13"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "PA")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(12);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_14"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "NonUnion"), $F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Management")}))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "MD")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(13);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_15"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "MD")) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(14);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_16"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "MN")) ) 
+    eval( $F.nullSafeEval($F.not($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Minneapolis"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "St Paul")})))) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(15);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_17"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval(($F.greaterThanOrEqualTo(((BigDecimal) ($F.resolve($input, new String[] {"employee","hourlyPay"}))), BigDecimal.valueOf(13.65)))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "CA")) ) 
+    eval( $F.nullSafeEval($F.not($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Francisco"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Oakland"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Diego"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Los Angeles")})))) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(false);
+	$determineUpsEmployeePayrollEligibility.setIndex(16);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_rule_18"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    not( 
+    DetermineUpsEmployeePayrollEligibility(  )   ) 
+    $input : Input(  )  
+    eval( $F.nullSafeEval(($F.lessThan(((BigDecimal) ($F.resolve($input, new String[] {"employee","hourlyPay"}))), BigDecimal.valueOf(13.65)))) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"employee","type"}))), "Union")) ) 
+    eval( $F.nullSafeEval($F.equals(((String) ($F.resolve($input, new String[] {"facility","state"}))), "CA")) ) 
+    eval( $F.nullSafeEval($F.not($F.anyTrue(Arrays.asList( new Object[] {$F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Francisco"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Oakland"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "San Diego"), $F.equals(((String) ($F.resolve($input, new String[] {"facility","city"}))), "Los Angeles")})))) ) 
+then
+	DetermineUpsEmployeePayrollEligibility $determineUpsEmployeePayrollEligibility = new DetermineUpsEmployeePayrollEligibility();
+	$determineUpsEmployeePayrollEligibility.setDetermineUpsEmployeePayrollEligibility(true);
+	$determineUpsEmployeePayrollEligibility.setIndex(17);
+	insert($determineUpsEmployeePayrollEligibility);
+end
+
+rule "determineUpsEmployeePayrollEligibility_singleResultOutput"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 0
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    $input : Input(  )  
+    $determineUpsEmployeePayrollEligibility : DetermineUpsEmployeePayrollEligibility(  )  
+then
+	DetermineUpsEmployeePayrollEligibility_Output $determineUpsEmployeePayrollEligibility_Output = new DetermineUpsEmployeePayrollEligibility_Output();
+	$determineUpsEmployeePayrollEligibility_Output.setDetermineUpsEmployeePayrollEligibility($determineUpsEmployeePayrollEligibility.getDetermineUpsEmployeePayrollEligibility());
+	retract($determineUpsEmployeePayrollEligibility);
+	insert($determineUpsEmployeePayrollEligibility_Output);
+end
+
+rule "determineUpsEmployeePayrollEligibility_emptyResultFallBack"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience -1
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    not( 
+    DetermineUpsEmployeePayrollEligibility_Output(  )   ) 
+    $input : Input(  )  
+then
+	DetermineUpsEmployeePayrollEligibility_Output $determineUpsEmployeePayrollEligibility_Output = new DetermineUpsEmployeePayrollEligibility_Output();
+	$determineUpsEmployeePayrollEligibility_Output.setDetermineUpsEmployeePayrollEligibility(null);
+	insert($determineUpsEmployeePayrollEligibility_Output);
+end
+
+rule "determineUpsEmployeePayrollEligibility_cleanup_rule_output"
+    no-loop true
+    //decision:  determineUpsEmployeePayrollEligibility
+    salience 2
+when
+    $F : DmnFormulaeLocal(  )  
+    $H : DmnHierarchyFormulae(  )  
+    DetermineUpsEmployeePayrollEligibility_Output(  )  
+    $determineUpsEmployeePayrollEligibility : DetermineUpsEmployeePayrollEligibility(  )  
+then
+	retract($determineUpsEmployeePayrollEligibility);
+end

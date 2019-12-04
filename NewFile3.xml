@@ -1,0 +1,53 @@
+{
+  "lookup": null,
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "com.bell.belldemo.BellApp": {
+            "department": ""tech",
+            "age": 35
+          }
+        },
+        "out-identifier": "output",
+        "return-object": true,
+        "entry-point": "DEFAULT",
+        "disconnected": false
+      }
+    }
+    {
+      "fire-all-rules": {
+        "max": -1,
+        "out-identifier": null
+      }
+    }
+  ]
+}
+
+{
+  "lookup": null,
+  "commands": [
+    {
+      "insert": {
+        "object": {
+          "com.bell.bellpoc.Ticket": {
+            "problemType": "INTERFACE-DEMON-4-SLNP-TRAP-LINK-DOWN",
+            "assignToGroup": "INOC-SURVIELLANCE",
+            "source": "UI",
+             "description": "",
+          }
+        },
+        "out-identifier": "output",
+        "return-object": true,
+        "entry-point": "DEFAULT",
+        "disconnected": false
+      }
+    }
+    {
+      "fire-all-rules": {
+        "max": -1,
+        "out-identifier": null
+      }
+    }
+  ]
+}

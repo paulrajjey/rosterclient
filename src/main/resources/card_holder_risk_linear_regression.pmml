@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<PMML xmlns="http://www.dmg.org/PMML-4_2" version="4.2">
+	<Header>
+		<Timestamp>2019-06-04T14:07:09Z</Timestamp>
+	</Header>
+	<DataDictionary numberOfFields="4">
+		<DataField name="holder_risk" optype="continuous" dataType="double"/>
+		<DataField name="age" optype="continuous" dataType="double"/>
+		<DataField name="holder_index" optype="continuous" dataType="double"/>
+		<DataField name="incidents" optype="continuous" dataType="double"/>
+	</DataDictionary>
+	<RegressionModel modelName="disputePMMLModel" functionName="regression" algorithmName="linearRegression" >	
+		<MiningSchema>
+			<MiningField name="holder_risk" usageType="target"/>
+			<MiningField name="age"/>
+			<MiningField name="holder_index"/>
+			<MiningField name="incidents"/>
+		</MiningSchema>
+		<RegressionTable intercept="1.0908673660946375">
+			<NumericPredictor name="age" coefficient="-0.006426506849750623"/>
+			<NumericPredictor name="holder_index" coefficient="-0.41402039616493486"/>
+			<NumericPredictor name="incidents" coefficient="0.3936492014467317"/>
+		</RegressionTable>
+	</RegressionModel>
+</PMML>
